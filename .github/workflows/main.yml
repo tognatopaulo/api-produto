@@ -22,17 +22,28 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
       
       - name: Docker Login
         # You may pin to the exact commit or the version.
         # uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         uses: docker/login-action@v1.9.0
         with:
-          # Server address of Docker registry. If not set then will default to Docker Hub
           username: ${{secrets.DOCKERHUB_USER}}
           # Password or personal access token used to log against the Docker registry
           password: ${{secrets.DOCKERHUB_PWD}}
+          # Log out from the Docker registry at the end of a job
 
+      
       - name: Build and push Docker images
         # You may pin to the exact commit or the version.
         # uses: docker/build-push-action@e1b7f96249f2e4c8e4ac1519b9608c0d48944a1f
@@ -44,40 +55,36 @@ jobs:
           file: ./src/Dockerfile
           push: true
           tags: |
-            fabricioveronez/api-bootcamp-produto:latest
-            fabricioveronez/api-bootcamp-produto:${{github.run_number}}
+            paulotognato/api-bootcamp-produto:latest
+            paulotognato/api-bootcamp-produto:${{github.run_number}}
             
+  # This workflow contains a single job called "build"
   CD:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     needs: [CI]
     steps:
       - uses: actions/checkout@v2
-      
       - name: Kubernetes set context
         uses: Azure/k8s-set-context@v1
+        
         with:
           # Acceptable values: kubeconfig or service-account
           method: kubeconfig
-          # Kubernetes Config
           kubeconfig: ${{secrets.K8S_CONFIG}}
+          context: # optional, default is 
           
-      - name: Deploy MongoDB
+      - name: Deploy MONGODB
         uses: Azure/k8s-deploy@v1.3
         with:
           manifests: |
             k8s/mongodb/deployment.yaml
             k8s/mongodb/service.yaml
             
-      - name: Deploy WebApi
+      - name: Deploy API
         uses: Azure/k8s-deploy@v1.3
         with:
-          images: fabricioveronez/api-bootcamp-produto:${{github.run_number}}
           manifests: |
             k8s/api/deployment.yaml
-          
-                
-      
-    
-    
-      
+
 
