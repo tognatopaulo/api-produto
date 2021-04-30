@@ -1,9 +1,9 @@
 ---
 swagger: "2.0"
 info:
-  description: "API de Cadastro de Produtos - Nova Versão - Versao Paulo Tognato"
-  version: "Paulo Tognato"
-  title: "Cadastro de Produtos - Versao Paulo Tognato"
+  description: "API de Cadastro de Produtos - Nova Versão - Versao Paulo Tognato 2.0"
+  version: "Paulo Tognato 2.0"
+  title: "Cadastro de Produtos - Versao Paulo Tognato 2.0"
   contact:
     email: "fabricio@veronez.dev"
 paths:
