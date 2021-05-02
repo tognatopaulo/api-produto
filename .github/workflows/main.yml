@@ -77,6 +77,7 @@ jobs:
       - name: Deploy MONGODB
         uses: Azure/k8s-deploy@v1.3
         with:
+          images: paulotognato/api-bootcamp-produto:${{github.run_number}}
           manifests: |
             k8s/mongodb/deployment.yaml
             k8s/mongodb/service.yaml
@@ -84,6 +85,7 @@ jobs:
       - name: Deploy API
         uses: Azure/k8s-deploy@v1.3
         with:
+          images: paulotognato/api-bootcamp-produto:${{github.run_number}}
           manifests: |
             k8s/api/deployment.yaml
 
